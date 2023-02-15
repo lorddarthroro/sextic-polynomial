@@ -1,8 +1,31 @@
 import math
+import random
 
 a, b, c, d, e, f = 1, 1, 1, 1, 1, 1
 left = [a, b, c, d, e]
 right = f
+
+
+
+def round_to_x6(n):
+    # Step 1: Take the 6th root of the positive integer.
+    root6_n = n ** (1 / 6)
+
+    # Step 2: Calculate the value of x.
+    x = round(root6_n)
+
+    # Step 3: Raise x to the 6th power.
+    rounded_n = x ** 6
+
+    return rounded_n
+
+
+
+
+def error(l, r):
+    print(l, r)
+    s = sum(l)
+    return r - s
 
 
 def round_to_next_higher_x6(n):
@@ -15,25 +38,25 @@ def round_to_next_higher_x6(n):
     # Step 3: Raise x to the 6th power.
     rounded_n = x ** 6
 
-    # Return the rounded value.
     return rounded_n
-
-
-def error(l, r):
-    s = sum(l)
-    return r - s
 
 
 def sextic_error_calc(l, r):
     while True:
         err = error(l, r)
         if err == 0:
-            return left, right
+            return l, r
         elif err < 0:
-            r = round_to_next_higher_x6(r + abs(err))
+            prev_r = r
+            r = round_to_x6(r + abs(err))
+            if r == prev_r:
+                r = round_to_next_higher_x6(r + abs(err))
         else:
             l.sort()
-            l[0] = round_to_next_higher_x6(l[0] + err)
+            prev_l = l
+            l[0] = round_to_x6(l[0] + err)
+            if l[0] == prev_l[0]:
+                l[0] = round_to_next_higher_x6(l[0] + abs(err))
 
 
 print(sextic_error_calc(left, right))
